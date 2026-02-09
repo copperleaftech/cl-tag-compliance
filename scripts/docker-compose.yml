@@ -1,0 +1,28 @@
+services:
+  tag-compliance:
+    build: .
+    container_name: tag-noncompliant-resources
+    volumes:
+      # Mount logs directory to persist logs
+      - ./logs:/app/logs
+    environment:
+      - "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
+      - "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
+      - "AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN}"
+      - "AWS_DEFAULT_REGION=ca-central-1"
+      # Required parameters
+      - Customer=${Customer}
+      - CostCenter=${CostCenter}
+      - Sub_Account_ID=${Sub_Account_ID}
+      - ENABLE_DRY_RUN=${ENABLE_DRY_RUN}
+    working_dir: /app/logs
+    command: >
+      --aggregator aws-controltower-ConfigAggregatorForOrganizations
+      --config-rule required-tags-costcenter-customer
+      --customer ${Customer}
+      --cost-center ${CostCenter}
+      --account ${Sub_Account_ID}
+      --aggregator-region ca-central-1
+      --role-name OrganizationAccountAccessRole
+      ${ENABLE_DRY_RUN}
+      --verbose

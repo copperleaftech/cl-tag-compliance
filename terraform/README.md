@@ -46,17 +46,13 @@ terraform init
 
 ```bash
 # Production
-AWS_PROFILE=prod terraform plan
-
-# Development (with different backend)
-AWS_PROFILE=dev terraform init -backend-config="bucket=copperleaf-devops-terraform-state-dev"
-AWS_PROFILE=dev terraform plan
+terraform plan
 ```
 
 ### Apply
 
 ```bash
-AWS_PROFILE=prod terraform apply
+terraform apply
 ```
 
 ## Architecture
@@ -100,7 +96,6 @@ The tag compliance rules enforce the following tags on resources:
 
 - `CostCenter`
 - `Customer`
-- `Owner`
 
 ## File Structure
 
