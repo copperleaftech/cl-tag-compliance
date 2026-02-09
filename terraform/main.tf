@@ -69,7 +69,7 @@ module "tag_compliance_rule_geo_spatial" {
 module "aws_config_rollout_support" {
   source             = "./modules/aws-config-rollout"
   config_bucket_name = "cl-org-aws-config"
-  ou_ids             = ["ou-ncxy-v65280le"]
+  ou_ids             = ["ou-ncxy-jav04m19"]
   regions            = local.regions
   tags               = local.common_tags
   name_suffix        = "Support"
@@ -77,7 +77,7 @@ module "aws_config_rollout_support" {
 
 module "tag_compliance_rule_support" {
   source      = "./modules/tag-compliance-rule"
-  ou_ids      = ["ou-ncxy-v65280le"]
+  ou_ids      = ["ou-ncxy-jav04m19"]
   regions     = local.regions
   tags        = local.common_tags
   name_suffix = "Support"
