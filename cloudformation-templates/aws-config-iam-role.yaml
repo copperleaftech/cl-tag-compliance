@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: IAM Role for AWS Config (deployed once per account)
+
+Parameters:
+  ConfigBucketName:
+    Type: String
+
+Resources:
+  ConfigRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "aws-config-role-${AWS::AccountId}"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: config.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWS_ConfigRole
+      Policies:
+        - PolicyName: CrossAccountS3DeliveryPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:PutObjectAcl
+                Resource: !Sub "arn:aws:s3:::${ConfigBucketName}/AWSLogs/${AWS::AccountId}/Config/*"
+              - Effect: Allow
+                Action:
+                  - s3:GetBucketAcl
+                Resource: !Sub "arn:aws:s3:::${ConfigBucketName}"
+      Tags:
+        - Key: CostCenter
+          Value: "General and Admin"
+        - Key: Customer
+          Value: Copperleaf
+        - Key: Owner
+          Value: cloudops@copperleaf.com
+
+Outputs:
+  ConfigRoleArn:
+    Description: ARN of the Config IAM Role
+    Value: !GetAtt ConfigRole.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-ConfigRoleArn"

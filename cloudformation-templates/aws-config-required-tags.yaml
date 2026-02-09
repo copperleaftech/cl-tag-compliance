@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Require CostCenter and Customer tags
+
+Resources:
+  RequiredTagsRule:
+    Type: AWS::Config::ConfigRule
+    Properties:
+      ConfigRuleName: required-tags-costcenter-customer
+      Description: Ensure CostCenter and Customer tags exist on all resources
+      Source:
+        Owner: AWS
+        SourceIdentifier: REQUIRED_TAGS
+      InputParameters:
+        tag1Key: CostCenter
+        tag2Key: Customer
+
