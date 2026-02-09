@@ -3,8 +3,8 @@ services:
     build: .
     container_name: tag-noncompliant-resources
     volumes:
-      # Mount logs directory to persist logs
-      - ./logs:/app/logs
+      # Mount current folder so log files are available on host
+      - ./:/app
     environment:
       - "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}"
       - "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}"
@@ -14,7 +14,6 @@ services:
       - CostCenter=${CostCenter}
       - Sub_Account_ID=${Sub_Account_ID}
       - ENABLE_DRY_RUN=${ENABLE_DRY_RUN}
-    working_dir: /app/logs
     command: >
       --aggregator aws-controltower-ConfigAggregatorForOrganizations
       --config-rule required-tags-costcenter-customer
