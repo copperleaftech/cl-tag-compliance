@@ -83,3 +83,21 @@ module "tag_compliance_rule_support" {
   name_suffix = "Support"
   depends_on  = [module.aws_config_rollout_support]
 }
+
+module "aws_config_rollout_product_development" {
+  source             = "./modules/aws-config-rollout"
+  config_bucket_name = "cl-org-aws-config"
+  ou_ids             = ["ou-ncxy-g4tarlgu"]
+  regions            = local.regions
+  tags               = local.common_tags
+  name_suffix        = "Product-Development"
+}
+
+module "tag_compliance_rule_product_development" {
+  source      = "./modules/tag-compliance-rule"
+  ou_ids      = ["ou-ncxy-g4tarlgu"]
+  regions     = local.regions
+  tags        = local.common_tags
+  name_suffix = "Product-Development"
+  depends_on  = [module.aws_config_rollout_product_development]
+}
