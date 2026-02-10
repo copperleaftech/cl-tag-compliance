@@ -14,13 +14,16 @@ services:
       - CostCenter=${CostCenter}
       - Sub_Account_ID=${Sub_Account_ID}
       - ENABLE_DRY_RUN=${ENABLE_DRY_RUN}
-    command: >
-      --aggregator aws-controltower-ConfigAggregatorForOrganizations
-      --config-rule required-tags-costcenter-customer
-      --customer ${Customer}
-      --cost-center ${CostCenter}
-      --account ${Sub_Account_ID}
-      --aggregator-region ca-central-1
-      --role-name OrganizationAccountAccessRole
-      ${ENABLE_DRY_RUN}
-      --verbose
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        python /app/tag_noncompliant_resources.py \
+          --aggregator aws-controltower-ConfigAggregatorForOrganizations \
+          --config-rule required-tags-costcenter-customer \
+          --customer "$$Customer" \
+          --cost-center "$$CostCenter" \
+          --account "$$Sub_Account_ID" \
+          --aggregator-region ca-central-1 \
+          --role-name OrganizationAccountAccessRole \
+          $$ENABLE_DRY_RUN \
+          --verbose
